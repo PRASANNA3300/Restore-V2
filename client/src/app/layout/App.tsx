@@ -3,8 +3,6 @@ import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 import { useAppSelector } from "../Store/store";
 
-
-
 function App() {
   const {darkMode} = useAppSelector(state => state.ui)
   const palleteType = darkMode ? 'dark' : 'light'
