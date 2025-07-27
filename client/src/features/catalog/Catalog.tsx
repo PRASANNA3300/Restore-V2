@@ -20,6 +20,7 @@ export default function Catalog() {
             <Grid2 size={3}>
                 <Filters  filtersData={filtersData}/>
             </Grid2>
+            
             <Grid2 size={9}>
                 {data.items && data.items.length > 0 ? (
                     <>
