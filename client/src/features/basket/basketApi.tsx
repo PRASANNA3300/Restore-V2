@@ -1,7 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithErrorHandling } from "../../app/api/baseApi";
-import { Item, type Basket } from "../../app/models/Basket";
+import { type Basket, Item } from "../../app/models/Basket";
 import type { Product } from "../../app/models/Product";
+import Cookies from 'js-cookie';
 
 function isBasketItem(product: Product | Item): product is Item {
     return (product as Item).quantity !== undefined;
@@ -37,7 +38,6 @@ export const basketApi = createApi({
                             if (existingItem) existingItem.quantity += quantity;
                             else draft.items.push(isBasketItem(product)
                                 ? product : { ...product, productId: product.id, quantity });
-
                         }
                     })
                 )
@@ -45,7 +45,7 @@ export const basketApi = createApi({
                 try {
                     await queryFulfilled;
 
-                    if(isNewBasket) dispatch(basketApi.util.invalidateTags(['Basket']))
+                    if (isNewBasket) dispatch(basketApi.util.invalidateTags(['Basket']))
                 } catch (error) {
                     console.log(error);
                     patchResult.undo();
@@ -78,11 +78,19 @@ export const basketApi = createApi({
                 }
             }
         }),
+        clearBasket: builder.mutation<void, void>({
+            queryFn: () => ({ data: undefined }),
+            onQueryStarted: async (_, { dispatch }) => {
+                dispatch(
+                    basketApi.util.updateQueryData('fetchBasket', undefined, (draft) => {
+                        draft.items = []
+                    })
+                );
+                Cookies.remove('basketId');
+            }
+        })
     })
-})
+});
 
-export const {
-    useFetchBasketQuery,
-    useAddBasketItemMutation,
-    useRemoveBasketItemMutation,
-} = basketApi;
+export const { useFetchBasketQuery, useAddBasketItemMutation,
+    useRemoveBasketItemMutation, useClearBasketMutation } = basketApi;
