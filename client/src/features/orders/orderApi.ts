@@ -5,11 +5,11 @@ import type { CreateOrder, Order } from "../../app/models/order";
 export const orderApi = createApi({
   reducerPath: "orderApi",
   baseQuery: baseQueryWithErrorHandling,
-  tagTypes: ["Order"],
+  tagTypes: ["Orders"],
   endpoints: (builder) => ({
     fetchOrders: builder.query<Order[], void>({
       query: () => "orders",
-      providesTags: ["Order"],
+      providesTags: ["Orders"],
     }),
     fetchOrderDetailed: builder.query<Order, number>({
       query: (id) => ({
@@ -23,12 +23,8 @@ export const orderApi = createApi({
         body: order,
       }),
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        try {
-          await queryFulfilled;
-          dispatch(orderApi.util.invalidateTags(["Order"]));
-        } catch (error) {
-          console.log(error);
-        }
+        await queryFulfilled;
+        dispatch(orderApi.util.invalidateTags(["Orders"]));
       },
     }),
   }),
