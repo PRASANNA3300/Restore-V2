@@ -1,7 +1,7 @@
-import { Button, Divider, Fade, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
+import { Button, Menu, Fade, MenuItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
 import { useState } from "react";
 import type { User } from "../models/user";
-import { History, Logout, Person } from "@mui/icons-material";
+import { History, Inventory, Logout, Person } from "@mui/icons-material";
 import { useLogoutMutation } from "../../features/account/accountApi";
 import { Link } from "react-router-dom";
 
@@ -13,7 +13,7 @@ export default function UserMenu({ user }: Props) {
     const [logout] = useLogoutMutation();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
@@ -23,11 +23,10 @@ export default function UserMenu({ user }: Props) {
     return (
         <div>
             <Button
-                id="fade-button"
                 onClick={handleClick}
-                color="inherit"
-                size="large"
-                sx={{fontSize:'1.1rem'}}
+                color='inherit'
+                size='large'
+                sx={{ fontSize: '1.1rem' }}
             >
                 {user.email}
             </Button>
@@ -41,11 +40,11 @@ export default function UserMenu({ user }: Props) {
                 onClose={handleClose}
                 TransitionComponent={Fade}
             >
-                <MenuItem >
+                <MenuItem>
                     <ListItemIcon>
                         <Person />
                     </ListItemIcon>
-                    <ListItemText>My Profile</ListItemText>
+                    <ListItemText>My profile</ListItemText>
                 </MenuItem>
                 <MenuItem component={Link} to='/orders'>
                     <ListItemIcon>
@@ -53,6 +52,13 @@ export default function UserMenu({ user }: Props) {
                     </ListItemIcon>
                     <ListItemText>My orders</ListItemText>
                 </MenuItem>
+                {user.roles.includes('Admin') &&
+                    <MenuItem component={Link} to='/inventory'>
+                        <ListItemIcon>
+                            <Inventory />
+                        </ListItemIcon>
+                        <ListItemText>Inventory</ListItemText>
+                    </MenuItem>}
                 <Divider />
                 <MenuItem onClick={logout}>
                     <ListItemIcon>
