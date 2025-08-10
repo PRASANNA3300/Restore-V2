@@ -163,7 +163,11 @@ export default function CheckoutStepper() {
             </Box>
 
             <Box display='flex' paddingTop={2} justifyContent='space-between'>
-                <Button onClick={handleBack}>Back</Button>
+                <Button
+                    onClick={handleBack}
+                    disabled={activeStep === 0}>
+                    Back
+                </Button>
                 <Button
                     onClick={handleNext}
                     disabled={
