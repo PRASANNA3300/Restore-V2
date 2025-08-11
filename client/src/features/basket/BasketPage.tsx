@@ -8,7 +8,23 @@ export default function BasketPage() {
 
     if (isLoading) return <Typography>Loading Basket...</Typography>
 
-    if (!data || data.items.length === 0) return <Typography variant="h3">Your basket is empty</Typography>
+    if (!data || data.items.length === 0)
+        return (
+            <Grid2
+                container
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                sx={{ minHeight: "60vh", textAlign: "center", gap: 2 }}
+            >
+                <Typography variant="h3" fontWeight="bold" color="text.primary">
+                    Your basket is empty
+                </Typography>
+                <Typography variant="body1" color="text.secondary" maxWidth={400}>
+                    Looks like you haven’t added anything yet. Browse our collection and find something you’ll love!
+                </Typography>
+            </Grid2>
+        );
 
     return (
         <Grid2 container spacing={2}>
